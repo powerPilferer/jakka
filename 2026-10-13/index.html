@@ -55,9 +55,10 @@ p.cap{font-size:14px;color:var(--sub);text-align:center;margin:-2px 0 24px}
 .flow .arrow{align-self:center;color:var(--sub)}
 .foot{color:var(--sub);font-size:14px;font-style:italic}
 .by{display:flex;align-items:center;gap:10px;color:var(--sub);font-size:14px;margin:0 0 6px}
-blockquote.long{font-family:inherit;font-size:15px;line-height:1.75;color:#4a443e;background:#fbf7f0;
- border-left:3px solid var(--pick);padding:14px 18px;border-radius:0 8px 8px 0}
-blockquote cite{display:block;font-style:normal;font-size:13px;color:var(--pick);font-weight:600;margin-top:8px}
+/* 10-14 사장님 "박스처리 강조하니 오히려 잘 안 읽히는듯" → 상자·색 없이 책 속 발췌처럼 들여쓰기만 */
+blockquote.long{font-family:inherit;font-size:16px;line-height:1.85;color:var(--ink);background:none;
+ border:0;padding:0 0 0 1.5em;margin:26px 0}
+blockquote cite{display:block;font-style:normal;font-size:13px;color:var(--sub);margin-top:6px}
 .bars{margin:26px 0 6px}
 .bar{display:grid;grid-template-columns:5.5em 1fr 4.5em;align-items:center;gap:10px;margin:8px 0;font-size:14px}
 .bar .who{color:var(--sub)}
