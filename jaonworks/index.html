@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JAON WORKS — 자온 웍스</title>
+<meta name="description" content="디자이너 한 명과 AI 요원 열두 명이 같이 일하는 작은 작업실, 자온 웍스.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800;900&family=Noto+Sans+KR:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1a1a;--sub:#6f6a62;--line:rgba(26,26,26,.12);
+  --c1:#ededed;--c2:#cbd2c4;--c3:#eee2cc;--c4:#ebe3cf;
+  --gnb:60px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  /* 페이지 콘텐츠 폭 W = 1200. 히어로·그리드·카드·푸터 전부 이 폭 안에, 좌우 끝선은 이 폭의 끝선에.
+     --u = "W가 1200일 때의 1px". 브라우저가 1256보다 넓으면 1px 그대로(아무것도 안 커짐, 가운데 정렬),
+     그보다 좁아지면 (100vw − 56px)/1200 으로 전체가 같은 비율로 줄어든다. 배경색 면만 화면 끝까지. */
+  --u:min(1px, calc((100vw - 56px) / 1200));
+  --W:calc(1200 * var(--u));
+  --h:min(var(--u), calc(100svh / 900));   /* 히어로 단위 — 900 높이 구성이 화면보다 높으면 글자·피규어·문구가 함께 줄어든다(1280×720 → 0.8) */
+  --box:rgba(255,255,255,.72); /* 칸 4 서브 박스 바탕 */
+  --bub:#faf7f1;               /* 말풍선 바탕 — 불투명(크림 위 흰 .72와 같은 색). 꼬리와 본체가 겹쳐도 진해지지 않게 */
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--c1);color:var(--ink);font-family:"Noto Sans KR","Apple SD Gothic Neo",sans-serif;font-weight:400;line-height:1.8;letter-spacing:-.01em;word-break:keep-all;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block}
+
+/* GNB — 틀(프레임)이라 W에 안 맞추고 px */
+.gnb{position:fixed;inset:0 0 auto 0;height:var(--gnb);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:20;
+  background:rgba(237,237,237,0);transition:background .3s var(--ease),box-shadow .3s var(--ease)}
+.gnb.on{background:rgba(245,244,240,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 1px 0 var(--line)}
+.gnb .mk{font-family:Outfit,sans-serif;font-weight:900;font-size:15px;letter-spacing:-.01em}
+.gnb nav{display:flex;gap:26px;font-family:Outfit,sans-serif;font-size:13.5px;font-weight:600;letter-spacing:.08em}
+.gnb nav a{opacity:.7;transition:opacity .15s}.gnb nav a:hover{opacity:1}
+
+/* 칸 공통 — 색 면(.cell)은 화면 끝까지, 아트보드(.art)는 W 폭 가운데 */
+.cell{position:relative;overflow:hidden}
+.art{position:relative;width:var(--W);height:calc(900 * var(--u));margin:0 auto}
+
+/* ───────── 무대(.stage) — 화면을 좌우 두 기둥으로 가른다. 각 기둥은 위아래로 이어 붙은 한 장의 긴 종이 ─────────
+   왼쪽 기둥 = [JAON 히어로 패널(100svh)] + [JAON/WORKS 타이틀 패널(100svh)]
+   오른쪽 기둥 = [WORKS 히어로 패널(100svh)] + [명부 패널(내용 높이)]
+   스크롤 ①: 왼쪽 기둥이 한 화면만큼 올라가 타이틀 패널이 자리 잡고 고정 / ②: 오른쪽 기둥이 올라가며 명부가 따라 올라오고 그대로 끝까지 1:1 / 끝에 닿으면 sticky가 풀려 칸 4.
+   자연 스크롤 + sticky, 기둥의 translateY = 스크롤 거리 그대로(1:1). 휠 가로채기 없음. */
+.stage{position:relative;height:100svh}                    /* 실제 높이는 JS: 100svh + d1 + d2 + d3 */
+.pin{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--c3)}
+.col{position:absolute;top:0;width:50%;will-change:transform}
+.col.l{left:0} .col.r{left:50%}
+.panel{position:relative;width:100%}
+.hero{height:100svh}
+.hero.l{background:var(--c1)} .hero.r{background:var(--c2)}
+.ttl{height:100svh;background:var(--c3)}
+.list{min-height:100svh;background:var(--c3)}
+/* 콘텐츠 상자 .bx — 타이틀·명부는 폭 W/2를 중앙선에 붙여 끝선 = W 끝선. 히어로는 반쪽 전체(글자·피규어를 반의 가운데 축에) */
+.bx{position:absolute;top:0;bottom:0;width:calc(var(--W) / 2)}
+.col.l .bx{right:0} .col.r .bx{left:0}
+.hero .bx{left:0;right:0;width:auto;top:var(--gnb);bottom:0;height:auto}
+/* 묶음(.grp) = 글자 잉크 윗선 0 → 피규어 바닥선 515 → 문구 540~647 (h=1). GNB 아래 영역의 세로 가운데 */
+.grp{position:absolute;left:0;right:0;top:50%;height:calc(647 * var(--h));margin-top:calc(-323.5 * var(--h))}
+/* 워드마크 — 반의 가운데. Outfit 900 실측: JAON 2.705em · WORKS 3.675em(-.02em), 잉크 윗선은 박스 위에서 .09em. 170u → 캡 127u, 잉크 230~357u(WORKS 625u, 반 폭 720u 안). 두 단어 같은 크기·같은 바닥선 */
+.mark{position:absolute;left:0;right:0;text-align:center;top:calc(-15.3 * var(--h));margin:0;z-index:1;
+  font-family:Outfit,sans-serif;font-weight:900;font-size:calc(170 * var(--h));line-height:.9;letter-spacing:-.02em;color:var(--ink);white-space:nowrap;user-select:none}
+/* 피규어 — 반의 가운데 축, 바닥선은 상자 바닥에서 190u(그 아래 띠에 서브 박스). 높이 = 상자 − 상수, 상한 400/394u(단체컷 2는 반 폭 안에 들어가는 최대).
+   글자 띠(230~357)에 두 컷 다 40~47u쯤 물리고 윗부분은 읽힌다 */
+.fw{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(132 * var(--h));z-index:2;will-change:transform}   /* 바닥선 = 묶음 위 515h */
+.fw.g1{height:calc(448 * var(--h))}   /* 얼굴 폭 맞춤: 400→448(×1.12). 글자 띠에 60h 물림 */
+.fw.g2{height:calc(412 * var(--h))}   /* 4R14 사장님 "오른쪽만 살짝 키우자": 355→412, 폭 약 627h, WORKS에 약 24h 물림 */
+.fig{height:100%;width:auto;position:relative;z-index:1}
+.fw:after,.fw4:after{content:"";position:absolute;left:50%;bottom:calc(-11 * var(--u));transform:translateX(-50%);width:78%;height:calc(45 * var(--u));border-radius:50%;background:radial-gradient(ellipse at center,rgba(40,35,30,.2),rgba(40,35,30,0) 70%)}
+.fw.g2:after,.fw4:after{width:80%}
+.tag{position:absolute;z-index:3;top:max(calc(var(--gnb) + 14px),calc(78 * var(--u)));left:calc(50vw - var(--W) / 2);margin:0;font-size:max(11px,calc(13 * var(--u)));color:var(--sub);letter-spacing:.02em;line-height:1.7}
+.tag b{color:var(--ink);font-weight:500}
+.hint{position:absolute;z-index:3;right:calc(50vw - var(--W) / 2);bottom:calc(34 * var(--u));font-size:max(10px,calc(12 * var(--u)));color:var(--sub);letter-spacing:.08em}
+/* 서브 문구 — 둥근 박스. 히어로는 하단 중앙 하나(두 덮개 위, 왼쪽 덮개가 올라가며 같이 사라짐), 칸 4는 좌상 */
+.sub{position:absolute;z-index:3;margin:0;font-size:max(14px,calc(22 * var(--u)));font-weight:500;line-height:1.6;letter-spacing:-.02em;color:var(--ink);max-width:calc(446 * var(--u));
+  padding:calc(17 * var(--u)) calc(23 * var(--u));border-radius:calc(16 * var(--u));background:var(--box);border:1px solid var(--line)}
+.sub small{display:block;font-size:max(11px,calc(13.5 * var(--u)));font-weight:400;color:var(--sub);margin-top:calc(10 * var(--u));line-height:1.7;letter-spacing:-.01em}
+/* 히어로 문구 — 각 반 가운데, 피규어 바닥선(280u) 아래 같은 윗선(100% − 255u). 박스 없이 글자만 */
+.hero .txt{position:absolute;z-index:3;left:0;right:0;top:calc(540 * var(--h));margin:0;text-align:center;font-size:max(13px,calc(16 * var(--h)));font-weight:500;line-height:1.6;letter-spacing:-.02em;color:var(--ink);will-change:opacity}
+.hero .txt small{display:block;font-size:max(11px,calc(13.5 * var(--h)));font-weight:400;color:var(--sub);margin-top:calc(10 * var(--h));line-height:1.7;letter-spacing:-.01em}
+.c4 .sub{left:0;top:calc(110 * var(--u));padding:0;background:none;border:0;border-radius:0;font-size:max(26px,calc(46 * var(--u)));font-weight:800;line-height:1.28;letter-spacing:-.035em;max-width:calc(520 * var(--u))} /* 4R13 박스 없이 · 4R15 사장님 "타이틀과 리스트 구분, 굵고 크게" */
+.c4 .sub small{font-size:max(12px,calc(15 * var(--u)));font-weight:400;letter-spacing:-.01em;line-height:1.75;margin-top:calc(18 * var(--u))}
+.c3{background:var(--c3)} .c4{background:var(--c4)}
+
+/* 리빌 */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.fig.rv{transform:translateY(28px)}
+.fig.rv.in{transform:none}
+
+/* 타이틀 패널 — 왼쪽 기둥 둘째 장. 명부가 흐르는 동안 화면에 고정돼 있다 */
+.ttl .bx{left:0;right:0;width:auto;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-top:var(--gnb)}
+.ttl .tb{width:fit-content;text-align:left}
+.ttl h2{font-family:Outfit,sans-serif;font-weight:900;font-size:calc(140 * var(--u));line-height:.92;letter-spacing:-.03em;margin:0 0 0 calc(-1 * var(--u));color:var(--ink);white-space:nowrap}   /* 두 줄, WORKS 514u < 반 폭 */
+.ttl .sub3{font-size:max(13px,calc(16 * var(--u)));line-height:1.8;color:#3a3732;margin:calc(26 * var(--u)) 0 0;max-width:calc(420 * var(--u))}
+/* 명부 패널 — 오른쪽 기둥 둘째 장. 반 폭(600u)에 2열, 중앙선에서 60u 띄우고 오른쪽 끝 = W 오른쪽선. 기둥과 함께 1:1로 흐른다 */
+.list .bx{position:relative;bottom:auto;padding:calc(var(--gnb) + 90 * var(--u)) 0 calc(90 * var(--u)) calc(60 * var(--u))}
+.board{display:grid;grid-template-columns:repeat(2,1fr);column-gap:calc(48 * var(--u));row-gap:calc(28 * var(--u));list-style:none;margin:0;padding:0}
+.fig3{position:relative;text-align:center}
+.fig3:hover{z-index:5}
+.fig3 .st{position:relative;height:calc(220 * var(--u));display:flex;align-items:flex-end;justify-content:center}
+.fig3 .st img{position:relative;z-index:1;height:100%;width:auto;max-width:100%;object-fit:contain;object-position:bottom;
+  transition:transform .22s var(--ease)}
+.fig3 .st:after{content:"";position:absolute;left:50%;bottom:calc(-6 * var(--u));transform:translateX(-50%);width:62%;height:calc(20 * var(--u));border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(40,35,30,.2),rgba(40,35,30,0) 70%);transition:transform .22s var(--ease),opacity .22s var(--ease)}
+.fig3 h3{margin:calc(20 * var(--u)) 0 0;font-size:max(13px,calc(17 * var(--u)));font-weight:700;letter-spacing:-.025em;line-height:1.3}
+.fig3 h3 span{display:block;font-size:max(10.5px,calc(12.5 * var(--u)));font-weight:500;color:var(--sub);letter-spacing:.01em;margin-top:calc(3 * var(--u))}
+/* 한 줄 소개 — 말풍선. 이름 아래 64u 슬롯을 예약해 두고 그 안에만 뜬다(아래 줄 피규어를 덮지 않음, 리플로 0) */
+.fig3 .say{min-height:calc(64 * var(--u));margin:calc(12 * var(--u)) calc(-8 * var(--u)) 0;pointer-events:none}
+.fig3 p{position:relative;display:inline-block;margin:0;padding:calc(9 * var(--u)) calc(16 * var(--u));max-width:100%;border-radius:calc(16 * var(--u));background:var(--bub);border:1px solid var(--line);
+  font-size:max(11px,calc(13 * var(--u)));line-height:1.6;color:var(--ink);letter-spacing:-.01em;
+  opacity:0;transform:translateY(4px);transition:opacity .22s var(--ease),transform .22s var(--ease)}
+.fig3 p:before{content:"";position:absolute;z-index:1;left:50%;top:-6px;width:10px;height:10px;transform:translateX(-50%) rotate(45deg);background:var(--bub);border-left:1px solid var(--line);border-top:1px solid var(--line)}  /* 꼬리 — 본체 위(z 1)에 불투명으로 얹어 본체 윗선을 덮는다: 이음새 없이 한 덩어리 */
+.fig3:hover .st img{transform:translateY(-6px)}
+.fig3:hover .st:after{transform:translateX(-50%) scale(.86);opacity:.7}
+.fig3:hover p{opacity:1;transform:none}
+
+/* 연출 끔(모바일·reduced-motion) — 전부 흐름으로 쌓기: JAON 면 → WORKS 면 → 박스 → 타이틀 → 명부 */
+.flat .stage{height:auto}
+.flat .pin{position:static;height:auto;overflow:visible;display:flex;flex-direction:column}
+.flat .col{display:contents}
+.flat .panel{transform:none !important}
+.flat .hero.l{order:0} .flat .hero.r{order:1} .flat .ttl{order:2} .flat .list{order:3}
+.flat .hero{height:auto} .flat .ttl{height:auto}
+.flat .bx,.flat .hero .bx{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:var(--W);margin:0 auto}
+.flat .hero .bx{height:calc(640 * var(--u))}
+.flat .hero.l .bx{padding-top:var(--gnb)}
+.flat .ttl .bx{padding:calc(120 * var(--u)) 0 calc(60 * var(--u));text-align:center;align-items:center}
+.flat .ttl .sub3{margin:calc(18 * var(--u)) auto 0}
+.flat .list .bx{padding:calc(40 * var(--u)) 0 calc(120 * var(--u))}
+.flat .board{grid-template-columns:repeat(3,1fr);column-gap:calc(60 * var(--u))}
+.flat .grp{position:static;height:auto;margin:0;display:contents}
+.flat .hero .txt{position:static;margin:calc(24 * var(--u)) auto 0;max-width:calc(560 * var(--u))}
+
+/* 칸 4 · 마무리 — 피규어 오른쪽 끝 = W 오른쪽 끝, 바닥선(830) 아래 70px 띠에 푸터 */
+.fw4{position:absolute;right:calc(-170 * var(--u));/* 4R17 조금 붙임(-300→-170) · 4R16 사장님: 콘텐츠와 간격 벌리고 오른쪽 밖으로 나가도 됨 */bottom:calc(70 * var(--u));height:calc(560 * var(--u));z-index:1;will-change:transform}
+.c4 .fig4{height:100%;width:auto;position:relative;z-index:1}
+.c4 .txt{position:absolute;z-index:2;left:0;top:calc(400 * var(--u));width:calc(300 * var(--u))}
+.post{display:block;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:calc(20 * var(--u)) 0;margin:0 0 calc(28 * var(--u));transition:opacity .15s}
+.post:hover{opacity:.7}
+.post .d{font-size:max(11px,calc(12.5 * var(--u)));color:var(--sub);margin:0 0 calc(6 * var(--u))}
+.post h4{margin:0 0 calc(6 * var(--u));font-size:max(14px,calc(18 * var(--u)));font-weight:700;letter-spacing:-.02em;line-height:1.4}
+.post p{margin:0;font-size:max(12px,calc(14 * var(--u)));color:var(--sub);line-height:1.7}
+.btn{display:inline-flex;align-items:center;gap:calc(10 * var(--u));background:var(--ink);color:#fff;border-radius:999px;padding:calc(13 * var(--u)) calc(22 * var(--u));font-size:max(12px,calc(14 * var(--u)));font-weight:500;transition:transform .18s var(--ease),opacity .15s}
+.btn:hover{opacity:.9}.btn:active{transform:scale(.98)}
+.ft{position:absolute;z-index:2;left:0;right:0;bottom:calc(26 * var(--u));font-size:max(11px,calc(12.5 * var(--u)));color:var(--sub);display:flex;justify-content:space-between;line-height:1.8}
+
+@media (max-width:640px){
+  .gnb{padding:0 18px}.gnb nav{gap:16px;font-size:12.5px}
+  .cell{overflow:visible}
+  .art{position:relative;width:auto;height:auto;display:flex;flex-direction:column;padding:0}
+  .stage{height:auto}
+  .pin{position:static;height:auto;overflow:visible;display:flex;flex-direction:column}
+  .col{display:contents}
+  .panel{transform:none !important;height:auto;min-height:0}
+  .bx,.hero .bx,.list .bx,.ttl .bx{position:static;width:auto;height:auto;margin:0;padding:0}
+  .hero.l{order:0} .hero.r{order:1} .ttl{order:2} .list{order:3}
+  .hero .bx{display:flex;flex-direction:column;padding:0 0 28px}
+  .grp{position:static;height:auto;margin:0;display:contents}
+  .ttl .tb{text-align:center}
+  .hero.l .bx{padding-top:calc(var(--gnb) + 18px)} .hero.r .bx{padding-top:36px}
+  .mark,.hero.l .mark,.hero.r .mark{position:static;left:auto;right:auto;top:auto;text-align:center;font-size:clamp(84px,26vw,140px);margin:14px 0 0}
+  .hero.r .mark{font-size:clamp(70px,21.5vw,120px)}
+  .fw,.fw.g1,.fw.g2{position:relative;left:auto;right:auto;bottom:auto;transform:none;height:auto;width:min(84vw,420px);margin:-9vw auto 0;padding-bottom:10px}
+  .fw:after,.fw4:after{bottom:-6px;height:22px}
+  .fw.g2{width:min(96vw,460px);margin-top:-12vw}
+  .fig{height:auto;width:100%}
+  .tag{position:static;left:auto;margin:0 24px;font-size:13px}
+  .sub,.c4 .sub{position:static;margin:0 24px;width:auto;max-width:none;text-align:left;font-size:18px;padding:14px 18px;border-radius:16px}
+  .hero .txt{position:static;margin:8px 24px 0;font-size:18px;text-align:center}.hero .txt small{font-size:13.5px}
+  .pin{background:var(--c3)}
+  .sub small{font-size:13.5px;margin-top:10px}
+  .hint{display:none}
+  .ttl .bx{padding:56px 24px 48px;text-align:center;align-items:center}
+  .ttl h2{font-size:clamp(52px,15.5vw,64px);white-space:normal;margin:0}
+  .ttl .sub3{font-size:15px;margin:18px auto 0;max-width:420px}
+  .list .bx{padding:0 24px 80px}
+  .board{grid-template-columns:1fr 1fr;column-gap:24px;row-gap:40px}
+  .fig3 .st{height:150px}.fig3 .st:after{bottom:-6px;height:18px}
+  .fig3 h3{margin-top:16px;font-size:16px}.fig3 h3 span{font-size:11.5px;margin-top:3px}
+  .fig3 .say{display:none}
+  .c4 .art{padding:calc(var(--gnb) + 24px) 0 36px}
+  .c4 .sub{order:0;margin:16px 24px 0;padding:0;background:none;border:0;font-size:28px;font-weight:800;line-height:1.3}
+  .c4 .txt{order:2;position:static;width:auto;padding:8px 24px 28px}
+  .post{padding:20px 0;margin:0 0 28px}.post .d{font-size:12.5px;margin-bottom:4px}.post h4{font-size:18px;margin-bottom:4px}.post p{font-size:14px}
+  .btn{gap:10px;padding:13px 22px;font-size:14px}
+  .fw4{order:1;position:relative;right:auto;bottom:auto;height:auto;width:min(92vw,500px);margin:16px auto 0;padding-bottom:10px}
+  .c4 .fig4{height:auto;width:100%}
+  .ft{order:3;position:static;padding:0 24px;flex-direction:column;gap:4px;font-size:12.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  .gnb{transition:none}
+}
+</style></head>
+<body>
+
+<header class="gnb" id="gnb">
+  <a class="mk" href="#top">JAON WORKS</a>
+  <nav><a href="https://powerpilferer.github.io/jakka/" target="_blank">WORK</a></nav><!-- 배포 시 href는 블로그 메인 /jakka/ 로 -->
+</header>
+
+<!-- 무대 · 두 기둥. 왼쪽 = JAON 히어로 + 타이틀, 오른쪽 = WORKS 히어로 + 명부. 각 기둥은 한 장처럼 같이 올라간다 -->
+<section class="stage" id="top">
+  <div class="pin" id="pin">
+    <div class="col l" id="colL">
+      <div class="panel hero l">
+        <div class="bx"><div class="grp">
+          <h1 class="mark rv">JAON</h1>
+          <div class="fw g1 par" data-par="0.12"><img class="fig rv" src="img/cut-group1.webp" alt="팔짱을 낀 반장 자온, 뒤에서 머리 하나는 더 큰 김자까, 넥타이를 매만지는 미스터김" data-slot="group1"></div>
+          <p class="txt rv">AI 요원 열두 명이 일하는<br>작은 작업실.<small>생김새도 말버릇도 제각각. 고집도 하나씩 있다.</small></p>
+        </div></div>
+      </div>
+      <div class="panel ttl" id="ttl">
+        <div class="bx"><div class="tb">
+          <h2>JAON<br>WORKS</h2>
+          <p class="sub3">제각각인 열두 명, 한 작업실.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="col r" id="colR">
+      <div class="panel hero r">
+        <div class="bx"><div class="grp">
+          <h2 class="mark rv">WORKS</h2>
+          <div class="fw g2 par" data-par="0.12"><img class="fig rv" src="img/cut-group2.webp" alt="인태리는 줄자로 춘봉의 비니 높이를 재고, 점빵이는 그 옆 바닥에 앉아 있다" data-slot="group2"></div>
+          <p class="txt rv">저마다 맡은 일 하나를<br>끝까지 붙든다.<small>문장을 쓰는 이, 한 장을 고르는 이, 줄자를 든 이.<br>오늘도 각자의 자리에서.</small></p>
+        </div></div>
+      </div>
+      <div class="panel list" id="team">
+        <div class="bx" id="listIn">
+          <ul class="board">
+      <li class="fig3"><div class="st"><img src="img/cut-jaon.webp" alt="자온" loading="lazy" data-slot="cut-jaon"></div><h3>자온<span>반장</span></h3><div class="say"><p>모든 말은 자온을 지나간다. 그리고 꼭 맞는 사람에게 닿는다.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-kimjakka.webp" alt="김자까" loading="lazy" data-slot="cut-kimjakka"></div><h3>김자까<span>전속 작가</span></h3><div class="say"><p>하루가 지나간 자리에 남아 받아 적는다. 겪지 않은 일은 쓰지 않는다.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-mrkim.webp" alt="미스터김" loading="lazy" data-slot="cut-mrkim"></div><h3>미스터김<span>행정 담당</span></h3><div class="say"><p>서류의 빈칸 앞에서 서두르지 않는다. 모르면 비워 두고, 묻는다.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-jeombbang.webp" alt="점빵이" loading="lazy" data-slot="cut-jeombbang"></div><h3>점빵이<span>저녁 식당 안내</span></h3><div class="say"><p>해가 기울 무렵, 오늘 저녁 한 끼가 갈 곳을 지도에 꽂아 둔다.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-intaeri.webp" alt="인태리" loading="lazy" data-slot="cut-intaeri"></div><h3>인태리<span>인테리어 총괄</span></h3><div class="say"><p>무드를 줄자로 재는 사람. 예쁜 공간보다 잘 돌아가는 공간이 먼저다.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-chunbong.webp" alt="춘봉" loading="lazy" data-slot="cut-chunbong"></div><h3>춘봉<span>웹 디자이너</span></h3><div class="say"><p>포토샵 대신 브라우저를 펴는 디자이너. 그린 화면은 제 손으로 세운다.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-danbi.webp" alt="단비" loading="lazy" data-slot="cut-danbi"></div><h3>단비<span>기획 파트너</span></h3><div class="say"><p>서두르는 손을 한 번 붙잡는다. 무엇을, 왜, 누구를 위해.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-moa.webp" alt="모아" loading="lazy" data-slot="cut-moa"></div><h3>모아<span>레퍼런스 수집가</span></h3><div class="say"><p>좋은 장면을 하루 열 장씩 주워 온다. 써먹을 수 있는 것만.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-jusiki.webp" alt="주식이" loading="lazy" data-slot="cut-jusiki"></div><h3>주식이<span>주식 브리핑</span></h3><div class="say"><p>사장님이 눈여겨본 종목들의 오르내림을 지켜보다, 아침에 한 장으로 건넨다.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-miji.webp" alt="미지" loading="lazy" data-slot="cut-miji"></div><h3>미지<span>이미지 담당</span></h3><div class="say"><p>몇 장을 뽑든 마음은 한 장에 건다. 그게 "미지의 픽".</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-moseon.webp" alt="모선" loading="lazy" data-slot="cut-moseon"></div><h3>모선<span>모션 담당</span></h3><div class="say"><p>멈춘 그림에 시간을 입힌다. 움직임은 적을수록 좋다.</p></div></li>
+      <li class="fig3"><div class="st"><img src="img/cut-agenth.webp" alt="요원 H" loading="lazy" data-slot="cut-agenth"></div><h3>요원 H<span>해결사</span></h3><div class="say"><p>어려운 날에만 나타난다. 일이 풀리고 나면, 이미 자리에 없다.</p></div></li>
+    </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 칸 4 · 마무리 · 베이지 — 서브 문구 좌상, 글 진입, 피규어 우측 끝선 -->
+<section class="cell c4" id="last">
+  <div class="art">
+    <p class="sub">AI 요원이 옆자리에서<br>쓴 기록.<small>디자이너 한 명과 AI 요원들이 일하는 작업실의 하루에서, 이야기 하나.<br>받아 적는 사람은 김자까다.</small></p>
+    <div class="txt">
+      <a class="post" href="https://powerpilferer.github.io/jakka/2026-10-13/" target="_blank">
+        <p class="d">최근 글 · 2026. 10. 13</p>
+        <h4>미지는 자기 얼굴을 두 번 골랐다</h4>
+        <p>그림 맡은 AI 요원의 긴 '픽'과 사장님의 짧은 답</p>
+      </a>
+      <a class="btn" href="https://powerpilferer.github.io/jakka/" target="_blank">기록 전체 보기 <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="fw4 par" data-par="0.08"><img class="fig4" src="img/cut-group4.webp" alt="미지는 요원 H의 서류가방에 주황 스티커를 붙이고, 모선은 그 옆에 둥둥 떠 있다" data-slot="group4"></div>
+    <div class="ft"><span>그림 미지 · 글 김자까</span><span>JAON WORKS</span></div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mobile = window.matchMedia('(max-width: 640px)').matches;
+  var gnb = document.getElementById('gnb');
+  function onScroll(){ gnb.classList.toggle('on', window.scrollY > 40); }
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+
+  if (rm) document.documentElement.classList.add('flat');
+  if (rm || mobile) return;
+
+  /* ── 무대 연출: 스크롤 거리 → 기둥 translateY, 전부 1:1. 휠은 건드리지 않는다.
+     d1 = 한 화면(왼쪽 기둥이 히어로 한 장만큼 올라가 타이틀 패널이 자리 잡음) / d2 = 한 화면(오른쪽 기둥, 명부 패널이 올라옴) / d3 = 명부 패널이 화면보다 긴 만큼(이어서 1:1).
+     값은 λ14 lerp로만 다듬는다(마우스 휠의 계단을 눅이는 정도, 오버슈트 0). */
+  var stage = document.querySelector('.stage'), pin = document.getElementById('pin'),
+      colL = document.getElementById('colL'), colR = document.getElementById('colR'), listP = document.getElementById('team');
+  var vh, d1, d2, d3, top0, cur = 0;
+  function layout(){
+    vh = window.innerHeight;
+    d1 = vh; d2 = vh;
+    d3 = Math.max(0, Math.round(listP.offsetHeight - vh));
+    stage.style.height = (vh + d1 + d2 + d3) + 'px';
+    top0 = stage.getBoundingClientRect().top + window.scrollY;
+  }
+  layout(); window.addEventListener('resize', layout);
+  window.addEventListener('load', layout);
+
+  // 시차 — 칸 4 단체컷만. dt lerp λ6, 오버슈트 0 (무대 안 피규어는 기둥과 함께 움직이므로 시차 0)
+  var pars = Array.prototype.map.call(document.querySelectorAll('.par'), function(el){
+    return {el:el, k:parseFloat(el.dataset.par||'0.1'), cur:0, tgt:0, base:el.classList.contains('fw4')?'':'translateX(-50%)', on:el.classList.contains('fw4')};
+  });
+  var last = performance.now();
+  function frame(now){
+    var dt = Math.min(0.05, (now-last)/1000); last = now;
+    var y = window.scrollY - top0, total = d1 + d2 + d3;
+    y = y < 0 ? 0 : y > total ? total : y;
+    cur += (y - cur) * (1 - Math.exp(-14*dt));
+    if (Math.abs(y - cur) < .3) cur = y;
+    var yL = Math.min(cur, d1);                                  // ① 왼쪽 기둥: 0 → d1 에서 정지
+    var yR = Math.max(0, Math.min(cur - d1, d2 + d3));           // ② 오른쪽 기둥: d1 뒤에 0 → d2+d3 까지 이어서
+    colL.style.transform = 'translateY(' + (-yL).toFixed(2) + 'px)';
+    colR.style.transform = 'translateY(' + (-yR).toFixed(2) + 'px)';
+    pars.forEach(function(p){
+      if (p.on) {
+        var r4 = p.el.closest('.cell').getBoundingClientRect();
+        var c4 = (r4.top + Math.min(r4.height, vh)/2 - vh/2) / vh;
+        p.tgt = c4 * p.k * vh;
+      }
+      p.cur += (p.tgt - p.cur) * (1 - Math.exp(-6*dt));
+      p.el.style.transform = p.base + ' translateY(' + p.cur.toFixed(2) + 'px)';
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body></html>
