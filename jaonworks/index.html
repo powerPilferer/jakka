@@ -54,15 +54,19 @@ img{display:block;max-width:100%}
 /* 10/19 사장님 "오버했을 때 각자 포즈로" → "모션이 이상해, 그냥 띡 바뀌게" — 전환 효과 없이 즉시 교체. 폰은 탭으로 */
 .stage .pose{position:absolute;left:50%;bottom:8%;height:calc(90% * var(--r));max-width:94%;object-fit:contain;object-position:bottom;
   transform:translateX(-50%);visibility:hidden;z-index:2;pointer-events:none}
-.card.포즈 .fig{visibility:hidden}
+.card.포즈:has(.pose) .fig{visibility:hidden}   /* 포즈 없는 카드(모아·신화방)는 전신 그대로 */
 .card.포즈 .pose{visibility:visible}
-.card:has(.pose){cursor:pointer}   /* 10/19 "피씨도 클릭으로, 둘 다 토글" — 오버 전환은 뺐다 */
+.card{cursor:pointer}   /* 10/19 "피씨도 클릭으로, 둘 다 토글" — 오버 전환은 뺐다. 누르면 포즈 + 하는 일 */
+.card .job{display:none;margin:0}
+.card .job em{display:block;font-style:normal;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--ink);opacity:.5;margin-bottom:3px}
+.card.포즈 .ln{display:none}
+.card.포즈 .job{display:block}
 .card:has(.pose):hover .fig{transform:translateX(-50%)}
 .card figcaption{padding:16px 4px 0}
 .card .nm{display:flex;align-items:baseline;gap:10px;margin:0}
 .card .nm b{font-size:20px;font-weight:700;letter-spacing:-.03em}
 .card .nm span{font-size:13px;color:var(--sub)}
-.card .ln{margin:6px 0 0;font-size:14.5px;line-height:1.65;color:#3a3732}
+.card .ln,.card.포즈 .job{margin:6px 0 0;font-size:14.5px;line-height:1.65;color:#3a3732}
 
 /* 포스터 — 4:5. 층: 원본 그룹샷(바닥 그림자째) → JAON WORKS 글자 → 같은 자리 누끼. 글자는 캐릭터 뒤로만 간다 */
 .posters{padding-bottom:110px}
@@ -129,7 +133,7 @@ a:focus-visible,.poster:focus-visible{outline:2px solid var(--ink);outline-offse
   .card .nm{flex-direction:column;gap:0}
   .card .nm b{font-size:17px}
   .card .nm span{font-size:12px}
-  .card .ln{font-size:13px;line-height:1.6}
+  .card .ln,.card.포즈 .job{font-size:13px;line-height:1.6}
   .members{padding-bottom:84px}
   .pgrid{grid-template-columns:1fr;gap:20px}
   .posters{padding-bottom:72px}
@@ -160,31 +164,31 @@ a:focus-visible,.poster:focus-visible{outline:2px solid var(--ink);outline-offse
     <div class="grid" data-motion="members">
       <!-- 순서 = 공개 페이지 명부 순서(= 포스터 묶음 순서) + 신화방(10.15 합류) -->
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">01</span><img class="fig" src="img/fig-jaon.webp" alt="자온 전신" width="440" height="640" loading="lazy"><img class="pose" src="img/pose-jaon.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>자온</b><span>반장</span></p><p class="ln">모든 말은 자온을 지나, 꼭 맞는 사람에게 닿는다.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>자온</b><span>반장</span></p><p class="ln">모든 말은 자온을 지나, 꼭 맞는 사람에게 닿는다.</p><p class="job"><em>하는 일</em>사장님 말을 받아 요원들에게 일을 나누고, 결과를 모아 정리해 보고한다.</p></figcaption></figure>
       <figure class="card" style="--r:.9917"><div class="stage"><span class="no">02</span><img class="fig" src="img/fig-kimjakka.webp" alt="김자까 전신" width="313" height="640" loading="lazy"><img class="pose" src="img/pose-kimjakka.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>김자까</b><span>전속 작가</span></p><p class="ln">하루가 지나간 자리에 남아 받아 적는다.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>김자까</b><span>전속 작가</span></p><p class="ln">하루가 지나간 자리에 남아 받아 적는다.</p><p class="job"><em>하는 일</em>에세이·블로그 글을 쓰고, 작업 결과를 읽기 쉬운 노트로 정리한다.</p></figcaption></figure>
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">03</span><img class="fig" src="img/fig-mrkim.webp" alt="미스터김 전신" width="462" height="640" loading="lazy"><img class="pose" src="img/pose-mrkim.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>미스터김</b><span>행정 담당</span></p><p class="ln">서류의 빈칸 앞에서 서두르지 않는다.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>미스터김</b><span>행정 담당</span></p><p class="ln">서류의 빈칸 앞에서 서두르지 않는다.</p><p class="job"><em>하는 일</em>지출결의서·휴가 신청 같은 회사 서류를 양식에 맞춰 준비한다.</p></figcaption></figure>
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">04</span><img class="fig" src="img/fig-jeombbang.webp" alt="점빵이 전신" width="460" height="640" loading="lazy"><img class="pose" src="img/pose-jeombbang.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>점빵이</b><span>저녁 식당 안내</span></p><p class="ln">오늘 저녁 한 끼가 갈 곳을 지도에 꽂아 둔다.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>점빵이</b><span>저녁 식당 안내</span></p><p class="ln">오늘 저녁 한 끼가 갈 곳을 지도에 꽂아 둔다.</p><p class="job"><em>하는 일</em>매일 오후, 그날 저녁 갈 식당 한 곳을 골라 맛지도에 올린다.</p></figcaption></figure>
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">05</span><img class="fig" src="img/fig-intaeri.webp" alt="인태리 전신" width="463" height="640" loading="lazy"><img class="pose" src="img/pose-intaeri.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>인태리</b><span>인테리어 총괄</span></p><p class="ln">무드를 줄자로 잰다. 예쁜 공간보다 잘 돌아가는 공간.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>인태리</b><span>인테리어 총괄</span></p><p class="ln">무드를 줄자로 잰다. 예쁜 공간보다 잘 돌아가는 공간.</p><p class="job"><em>하는 일</em>매장의 컨셉·평면·자재·조명을 잡고 현장 사진을 검토한다.</p></figcaption></figure>
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">06</span><img class="fig" src="img/fig-chunbong.webp" alt="춘봉 전신" width="447" height="640" loading="lazy"><img class="pose" src="img/pose-chunbong.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>춘봉</b><span>웹 디자이너</span></p><p class="ln">포토샵 대신 브라우저를 편다. 그린 화면은 제 손으로 세운다.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>춘봉</b><span>웹 디자이너</span></p><p class="ln">포토샵 대신 브라우저를 편다. 그린 화면은 제 손으로 세운다.</p><p class="job"><em>하는 일</em>기획과 시안을 받아 웹페이지를 디자인하고 직접 코드로 만든다.</p></figcaption></figure>
       <figure class="card" style="--r:.825"><div class="stage"><span class="no">07</span><img class="fig" src="img/fig-danbi.webp" alt="단비 전신" width="404" height="640" loading="lazy"><img class="pose" src="img/pose-danbi.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>단비</b><span>기획 파트너</span></p><p class="ln">서두르는 손을 한 번 붙잡는다. 무엇을, 왜, 누구를 위해.</p></figcaption></figure>
-      <figure class="card" style="--r:1"><div class="stage"><span class="no">08</span><img class="fig" src="img/fig-moa.webp" alt="모아 전신" width="535" height="640" loading="lazy"></div>
-        <figcaption><p class="nm"><b>모아</b><span>레퍼런스 수집가</span></p><p class="ln">좋은 장면을 하루 열 장씩 주워 온다. 써먹을 것만.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>단비</b><span>기획 파트너</span></p><p class="ln">서두르는 손을 한 번 붙잡는다. 무엇을, 왜, 누구를 위해.</p><p class="job"><em>하는 일</em>새 프로젝트 전에 목적·타깃·범위를 같이 고민해 기획서로 남긴다.</p></figcaption></figure>
+      <figure class="card" style="--r:1"><div class="stage"><span class="no">08</span><img class="fig" src="img/fig-moa.webp" alt="모아 전신" width="535" height="640" loading="lazy"><img class="pose" src="img/pose-moa.webp" alt="" loading="lazy" aria-hidden="true"></div>
+        <figcaption><p class="nm"><b>모아</b><span>레퍼런스 수집가</span></p><p class="ln">좋은 장면을 하루 열 장씩 주워 온다. 써먹을 것만.</p><p class="job"><em>하는 일</em>디자인 사이트와 핀터레스트에서 레퍼런스를 모아 볼 만한 것을 골라 준다.</p></figcaption></figure>
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">09</span><img class="fig" src="img/fig-jusiki.webp" alt="주식이 전신" width="429" height="640" loading="lazy"><img class="pose" src="img/pose-jusiki.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>주식이</b><span>주식 브리핑</span></p><p class="ln">눈여겨본 종목의 오르내림을 아침 한 장으로 건넨다.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>주식이</b><span>주식 브리핑</span></p><p class="ln">눈여겨본 종목의 오르내림을 아침 한 장으로 건넨다.</p><p class="job"><em>하는 일</em>관심 종목 등락과 뉴스를 확인해 아침 브리핑을 만든다.</p></figcaption></figure>
       <figure class="card" style="--r:.8417"><div class="stage"><span class="no">10</span><img class="fig" src="img/fig-miji.webp" alt="미지 전신" width="483" height="640" loading="lazy"><img class="pose" src="img/pose-miji.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>미지</b><span>이미지 담당</span></p><p class="ln">몇 장을 뽑든 마음은 한 장에 건다. 그게 미지의 픽.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>미지</b><span>이미지 담당</span></p><p class="ln">몇 장을 뽑든 마음은 한 장에 건다. 그게 미지의 픽.</p><p class="job"><em>하는 일</em>모델 컷·캐릭터·제품 이미지를 AI로 만들고 시안을 여러 장 뽑는다.</p></figcaption></figure>
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">11</span><img class="fig" src="img/fig-moseon.webp" alt="모선 전신" width="489" height="640" loading="lazy"><img class="pose" src="img/pose-moseon.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>모선</b><span>모션 담당</span></p><p class="ln">멈춘 그림에 시간을 입힌다. 움직임은 적을수록 좋다.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>모선</b><span>모션 담당</span></p><p class="ln">멈춘 그림에 시간을 입힌다. 움직임은 적을수록 좋다.</p><p class="job"><em>하는 일</em>웹 화면 애니메이션과 캐릭터 움직임을 설계하고 만든다.</p></figcaption></figure>
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">12</span><img class="fig" src="img/fig-agenth.webp" alt="요원 H 전신" width="442" height="640" loading="lazy"><img class="pose" src="img/pose-agenth.webp" alt="" loading="lazy" aria-hidden="true"></div>
-        <figcaption><p class="nm"><b>요원 H</b><span>해결사</span></p><p class="ln">어려운 날에만 나타난다. 일이 풀리면 이미 자리에 없다.</p></figcaption></figure>
-      <figure class="card" style="--r:.85"><div class="stage"><span class="no">13</span><span class="new">NEW</span><img class="fig" src="img/fig-shinhwa.webp" alt="신화방 전신" width="462" height="640" loading="lazy"></div>
-        <figcaption><p class="nm"><b>신화방</b><span>그림 작가</span></p><p class="ln">사진이 닿지 않는 곳을 선으로 그린다.</p></figcaption></figure>
+        <figcaption><p class="nm"><b>요원 H</b><span>해결사</span></p><p class="ln">어려운 날에만 나타난다. 일이 풀리면 이미 자리에 없다.</p><p class="job"><em>하는 일</em>정해진 담당 없이, 꼭 필요할 때만 나타나 일을 끝낸다.</p></figcaption></figure>
+      <figure class="card" style="--r:.85"><div class="stage"><span class="no">13</span><span class="new">NEW</span><img class="fig" src="img/fig-shinhwa.webp" alt="신화방 전신" width="462" height="640" loading="lazy"><img class="pose" src="img/pose-shinhwa.webp" alt="" loading="lazy" aria-hidden="true"></div>
+        <figcaption><p class="nm"><b>신화방</b><span>그림 작가</span></p><p class="ln">사진이 닿지 않는 곳을 선으로 그린다.</p><p class="job"><em>하는 일</em>이모티콘·웹툰·아이콘·일러스트를 직접 그린다.</p></figcaption></figure>
     </div>
   </section>
 
@@ -262,6 +266,6 @@ a:focus-visible,.poster:focus-visible{outline:2px solid var(--ink);outline-offse
 })();
 </script>
 <script>/* 카드를 누르면 포즈 ↔ 전신 (PC·폰 모두 토글, 10/19) */
-document.querySelectorAll(".card").forEach(c=>{if(c.querySelector(".pose"))c.addEventListener("click",()=>c.classList.toggle("포즈"))});</script>
+document.querySelectorAll(".card").forEach(c=>c.addEventListener("click",()=>c.classList.toggle("포즈")));   /* 포즈 없는 카드도 글은 바뀐다 */</script>
 </body>
 </html>
