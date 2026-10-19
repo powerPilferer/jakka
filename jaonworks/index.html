@@ -54,9 +54,12 @@ img{display:block;max-width:100%}
 /* 10/19 사장님 "오버했을 때 각자 포즈로" → "모션이 이상해, 그냥 띡 바뀌게" — 전환 효과 없이 즉시 교체. 폰은 탭으로 */
 .stage .pose{position:absolute;left:50%;bottom:8%;height:calc(90% * var(--r));max-width:94%;object-fit:contain;object-position:bottom;
   transform:translateX(-50%);visibility:hidden;z-index:2;pointer-events:none}
-.card:has(.pose):hover .fig,.card.포즈 .fig{visibility:hidden}
-.card:hover .pose,.card.포즈 .pose{visibility:visible}
-.card:has(.pose):hover .fig{transform:translateX(-50%)}
+.card.포즈 .fig{visibility:hidden}
+.card.포즈 .pose{visibility:visible}
+@media (hover:hover){   /* 폰은 탭하면 :hover 가 눌러붙어 두 번째 탭에 안 돌아왔다 — 마우스 기기에서만 오버 */
+  .card:has(.pose):hover .fig{visibility:hidden;transform:translateX(-50%)}
+  .card:hover .pose{visibility:visible}
+}
 .card figcaption{padding:16px 4px 0}
 .card .nm{display:flex;align-items:baseline;gap:10px;margin:0}
 .card .nm b{font-size:20px;font-weight:700;letter-spacing:-.03em}
