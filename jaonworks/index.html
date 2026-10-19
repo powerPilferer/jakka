@@ -56,10 +56,8 @@ img{display:block;max-width:100%}
   transform:translateX(-50%);visibility:hidden;z-index:2;pointer-events:none}
 .card.포즈 .fig{visibility:hidden}
 .card.포즈 .pose{visibility:visible}
-@media (hover:hover){   /* 폰은 탭하면 :hover 가 눌러붙어 두 번째 탭에 안 돌아왔다 — 마우스 기기에서만 오버 */
-  .card:has(.pose):hover .fig{visibility:hidden;transform:translateX(-50%)}
-  .card:hover .pose{visibility:visible}
-}
+.card:has(.pose){cursor:pointer}   /* 10/19 "피씨도 클릭으로, 둘 다 토글" — 오버 전환은 뺐다 */
+.card:has(.pose):hover .fig{transform:translateX(-50%)}
 .card figcaption{padding:16px 4px 0}
 .card .nm{display:flex;align-items:baseline;gap:10px;margin:0}
 .card .nm b{font-size:20px;font-weight:700;letter-spacing:-.03em}
@@ -175,7 +173,7 @@ a:focus-visible,.poster:focus-visible{outline:2px solid var(--ink);outline-offse
         <figcaption><p class="nm"><b>춘봉</b><span>웹 디자이너</span></p><p class="ln">포토샵 대신 브라우저를 편다. 그린 화면은 제 손으로 세운다.</p></figcaption></figure>
       <figure class="card" style="--r:.825"><div class="stage"><span class="no">07</span><img class="fig" src="img/fig-danbi.webp" alt="단비 전신" width="404" height="640" loading="lazy"><img class="pose" src="img/pose-danbi.webp" alt="" loading="lazy" aria-hidden="true"></div>
         <figcaption><p class="nm"><b>단비</b><span>기획 파트너</span></p><p class="ln">서두르는 손을 한 번 붙잡는다. 무엇을, 왜, 누구를 위해.</p></figcaption></figure>
-      <figure class="card" style="--r:1"><div class="stage"><span class="no">08</span><img class="fig" src="img/fig-moa.webp" alt="모아 전신" width="535" height="640" loading="lazy"><img class="pose" src="img/pose-moa.webp" alt="" loading="lazy" aria-hidden="true"></div>
+      <figure class="card" style="--r:1"><div class="stage"><span class="no">08</span><img class="fig" src="img/fig-moa.webp" alt="모아 전신" width="535" height="640" loading="lazy"></div>
         <figcaption><p class="nm"><b>모아</b><span>레퍼런스 수집가</span></p><p class="ln">좋은 장면을 하루 열 장씩 주워 온다. 써먹을 것만.</p></figcaption></figure>
       <figure class="card" style="--r:.8333"><div class="stage"><span class="no">09</span><img class="fig" src="img/fig-jusiki.webp" alt="주식이 전신" width="429" height="640" loading="lazy"><img class="pose" src="img/pose-jusiki.webp" alt="" loading="lazy" aria-hidden="true"></div>
         <figcaption><p class="nm"><b>주식이</b><span>주식 브리핑</span></p><p class="ln">눈여겨본 종목의 오르내림을 아침 한 장으로 건넨다.</p></figcaption></figure>
@@ -263,7 +261,7 @@ a:focus-visible,.poster:focus-visible{outline:2px solid var(--ink);outline-offse
   lb.addEventListener('close', () => opener && opener.focus());
 })();
 </script>
-<script>/* 폰(마우스 없음)은 카드를 누르면 포즈 ↔ 전신 */
-if(matchMedia("(hover:none)").matches)document.querySelectorAll(".card").forEach(c=>{if(c.querySelector(".pose"))c.addEventListener("click",()=>c.classList.toggle("포즈"))});</script>
+<script>/* 카드를 누르면 포즈 ↔ 전신 (PC·폰 모두 토글, 10/19) */
+document.querySelectorAll(".card").forEach(c=>{if(c.querySelector(".pose"))c.addEventListener("click",()=>c.classList.toggle("포즈"))});</script>
 </body>
 </html>
