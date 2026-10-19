@@ -51,12 +51,12 @@ img{display:block;max-width:100%}
 .stage .fig{position:absolute;left:50%;bottom:8%;height:calc(90% * var(--r));width:auto;transform:translateX(-50%);transition:transform .22s var(--ease);z-index:1}
 .stage:after{content:"";position:absolute;left:50%;bottom:calc(8% - 9px);width:58%;height:22px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(40,35,30,.16),rgba(40,35,30,0) 70%)}
 .card:hover .fig{transform:translate(-50%,-4px)}
-/* 10/19 사장님 "오버했을 때 각자 포즈로" — 전신 → 예전 포즈 컷, 살짝 튀어 오르며 바뀐다. 폰은 탭으로 */
+/* 10/19 사장님 "오버했을 때 각자 포즈로" → "모션이 이상해, 그냥 띡 바뀌게" — 전환 효과 없이 즉시 교체. 폰은 탭으로 */
 .stage .pose{position:absolute;left:50%;bottom:8%;height:calc(90% * var(--r));max-width:94%;object-fit:contain;object-position:bottom;
-  transform:translate(-50%,6px) scale(.96);transform-origin:50% 100%;opacity:0;transition:opacity .18s ease,transform .32s cubic-bezier(.34,1.56,.64,1);z-index:2;pointer-events:none}
-.card:has(.pose):hover .fig,.card.포즈 .fig{opacity:0;transition:opacity .12s ease,transform .22s var(--ease)}
-.card:hover .pose,.card.포즈 .pose{opacity:1;transform:translate(-50%,0) scale(1)}
-@media (prefers-reduced-motion:reduce){.stage .pose{transition:opacity .15s ease;transform:translate(-50%,0)}}
+  transform:translateX(-50%);visibility:hidden;z-index:2;pointer-events:none}
+.card:has(.pose):hover .fig,.card.포즈 .fig{visibility:hidden}
+.card:hover .pose,.card.포즈 .pose{visibility:visible}
+.card:has(.pose):hover .fig{transform:translateX(-50%)}
 .card figcaption{padding:16px 4px 0}
 .card .nm{display:flex;align-items:baseline;gap:10px;margin:0}
 .card .nm b{font-size:20px;font-weight:700;letter-spacing:-.03em}
