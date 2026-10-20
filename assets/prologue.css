@@ -19,8 +19,8 @@
 @media (max-width:640px){.home .narr{font-size:14.5px}}
 /* 10-20 메인 띠 김자까: 조금 크게, 띠 아래선이 발목에 오도록 내리고 발은 띠 안에서 가린다(사장님 "조금만 더 키우고 좀더 내려줘. 발목정도까지") */
 .band{overflow:hidden}
-.band .fig{width:240px;height:240px;margin-bottom:-74px}
-@media (max-width:640px){.band .fig{width:150px;height:150px;margin-bottom:-56px}}
+.band .fig{width:200px;height:200px;margin-bottom:-48px}   /* 10-20 2차: 띠 안에 발끝까지 다 보이게, 조금 작게(발이 띠 아래선에 닿음) */
+@media (max-width:640px){.band .fig{width:128px;height:128px;margin-bottom:-38px}}
 /* 10-20 커버 '상단' 형식 — 화면 가득 대신 위쪽 고정 높이(브런치식). 커버형식.txt 로 글마다 고른다 */
 .cover.full.top{height:520px;min-height:0}
 .cover.full.top .bgw{position:absolute;height:100%}
