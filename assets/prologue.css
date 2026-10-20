@@ -1,0 +1,12 @@
+/* 10-20 표지 내레이션 · 매 글 앞 소개 (사장님 확정) */
+.home .narr{margin:8px 0 56px;padding:0 0 40px;border-bottom:1px solid var(--line);
+  font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:16px;line-height:2.1;letter-spacing:.2px;color:var(--ink)}
+.home .narr p{margin:0}
+.home .narr p:first-child{margin:0 0 18px;font-size:14px;color:var(--cap)}
+.home .narr p:nth-child(6){margin-top:18px}
+.home .narr p:nth-child(8){margin-top:18px;font-weight:700}
+.home .narr p:last-child{margin-top:18px}
+.wrap .prologue{margin:8px auto 64px;max-width:440px;text-align:center;
+  font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:13.5px;line-height:2;color:var(--sub);letter-spacing:.2px;word-break:keep-all}
+.wrap .prologue::after{content:"· · ·";display:block;margin:28px 0 0;font-family:"Noto Sans KR",sans-serif;font-size:12px;letter-spacing:.3em;color:var(--cap)}
+.wrap .prologue + hr{display:none}
