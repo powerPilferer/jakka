@@ -23,10 +23,12 @@ img{display:block;max-width:100%}
 .wrap{width:var(--W);margin:0 auto}
 .en{font-family:Outfit,sans-serif}
 
-/* 상단 바 — 고정하지 않는다. 표지에 얹힌 작은 줄 */
-.top{display:flex;justify-content:space-between;align-items:center;height:64px}
-.top .mk{font-family:Outfit,sans-serif;font-weight:900;font-size:15px;letter-spacing:-.01em}
-.top nav{display:flex;gap:24px;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;letter-spacing:.08em}
+/* 상단 바 — 상단 고정(10-20). 배경은 화면 폭 전체로 깐다 */
+.top{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;height:76px}
+.top::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--bg);z-index:-1}
+.top .mk{font-family:Outfit,sans-serif;font-weight:900;font-size:20px;letter-spacing:-.01em}
+.top nav{display:flex;gap:30px;font-family:Outfit,sans-serif;font-size:15px;font-weight:600;letter-spacing:.08em}
+section[id]{scroll-margin-top:92px}
 .top nav a{opacity:.62;transition:opacity .15s}
 .top nav a:hover,.top nav a:focus-visible{opacity:1}
 
@@ -118,8 +120,10 @@ a:focus-visible,.poster:focus-visible{outline:2px solid var(--ink);outline-offse
 /* 폰 — 표지는 두 줄로 크게, 포스터 1열 */
 @media (max-width:560px){
   :root{--W:calc(100vw - 32px)}
-  .top{height:56px}
-  .top nav{gap:16px;font-size:12px}
+  .top{height:62px}
+  .top .mk{font-size:17px}
+  .top nav{gap:14px;font-size:12.5px;letter-spacing:.05em}
+  section[id]{scroll-margin-top:72px}
   .cover{padding:34px 0 46px}
   .cover h1{font-size:calc(var(--W) * .262);white-space:normal;line-height:.84}
   .cover h1 .sp{display:none}
