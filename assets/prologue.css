@@ -10,3 +10,5 @@
   font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:13.5px;line-height:2;color:var(--sub);letter-spacing:.2px;word-break:keep-all}
 .wrap .prologue::after{content:"· · ·";display:block;margin:28px 0 0;font-family:"Noto Sans KR",sans-serif;font-size:12px;letter-spacing:.3em;color:var(--cap)}
 .wrap .prologue + hr{display:none}
+/* 10-20 메인 띠 제목이 목록·내레이션보다 24px 왼쪽으로 나와 있던 것 — 같은 세로선에 맞춤 */
+.band .in{max-width:calc(var(--col) - 48px)}
