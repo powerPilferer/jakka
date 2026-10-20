@@ -10,7 +10,7 @@
 .home .narr p:nth-child(8){font-weight:700}
 .wrap .prologue{margin:8px auto 72px;max-width:460px;text-align:center;
   font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:14.67px;line-height:2;color:var(--body);letter-spacing:.2px;word-break:keep-all}
-.wrap .prologue::after{content:"";display:block;width:260px;height:28px;margin:44px auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 28' fill='none' stroke-linecap='round'%3E%3Cpath d='M0 15H96M164 15H260' stroke='%23cfcfcf' stroke-width='1'/%3E%3Cpath d='M123 24C121 17 125 7 132 4C136 2 136 8 131 12C127 15 124 15 125 13C127 9 138 9 139 15C140 20 134 23 130 21' stroke='%23999' stroke-width='1.3'/%3E%3C/svg%3E") center/contain no-repeat}   /* 10-20 브런치식 단 끊기: 선 — 펜 획 — 선 */
+.wrap .prologue::after{content:"";display:block;width:260px;height:28px;margin:44px auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 28' fill='none' stroke-linecap='round'%3E%3Cpath d='M0 15H96M164 15H260' stroke='%23cfcfcf' stroke-width='1'/%3E%3Cpath d='M125 7C129 3 138 2 143 4M136 4C138 11 137 19 133 24C129 29 121 27 122 21C123 17 129 17 133 20' stroke='%23999' stroke-width='1.3'/%3E%3C/svg%3E") center/contain no-repeat}   /* 10-20 브런치식 단 끊기: 선 — 필기체 J(자온웍스) — 선 */
 .wrap .prologue + hr{display:none}
 /* 10-20 메인 띠 제목이 목록·내레이션보다 24px 왼쪽으로 나와 있던 것 — 같은 세로선에 맞춤 */
 .band .in{max-width:calc(var(--col) - 48px)}
