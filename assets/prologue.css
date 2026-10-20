@@ -9,7 +9,7 @@
 .home .narr p:nth-child(6),.home .narr p:nth-child(8),.home .narr p:last-child{margin-top:18px}
 .home .narr p:nth-child(8){font-weight:700}
 .wrap .prologue{margin:8px auto 64px;max-width:440px;text-align:center;
-  font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:13.5px;line-height:2;color:var(--sub);letter-spacing:.2px;word-break:keep-all}
+  font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:14px;line-height:2;color:var(--sub);letter-spacing:.2px;word-break:keep-all}
 .wrap .prologue::after{content:"· · ·";display:block;margin:28px 0 0;font-family:"Noto Sans KR",sans-serif;font-size:12px;letter-spacing:.3em;color:var(--cap)}
 .wrap .prologue + hr{display:none}
 /* 10-20 메인 띠 제목이 목록·내레이션보다 24px 왼쪽으로 나와 있던 것 — 같은 세로선에 맞춤 */
@@ -21,3 +21,10 @@
 .band{overflow:hidden}
 .band .fig{width:240px;height:240px;margin-bottom:-74px}
 @media (max-width:640px){.band .fig{width:150px;height:150px;margin-bottom:-56px}}
+/* 10-20 커버 '상단' 형식 — 화면 가득 대신 위쪽 고정 높이(브런치식). 커버형식.txt 로 글마다 고른다 */
+.cover.full.top{height:520px;min-height:0}
+.cover.full.top .bgw{position:absolute;height:100%}
+.cover.full.coverb.top .bg{object-position:center 12%}   /* 높이가 낮아 머리가 잘리지 않게 위쪽 기준 */
+@media (max-width:640px){.cover.full.top{height:420px}.cover.full.coverb.top .bg{object-position:63% 40%}}
+/* 10-20 작가 상자: 전신을 원에 넣으니 몸통만 보였다 — 얼굴 컷(앱 아바타 얼굴)으로 */
+.author .av img{object-fit:cover;transform:none}
