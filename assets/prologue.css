@@ -1,14 +1,23 @@
-/* 10-20 표지 내레이션 · 매 글 앞 소개 (사장님 확정) */
-.home .narr{margin:8px 0 56px;padding:0 0 40px;border-bottom:1px solid var(--line);
-  font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:16px;line-height:2.1;letter-spacing:.2px;color:var(--ink)}
-.home .narr p{margin:0}
+/* 10-20 표지 내레이션 · 매 글 앞 소개 (사장님 확정) — 내레이션은 가운데 정렬, 위는 펜촉+세로선, 아래는 세로선으로 단을 끊는다(브런치식) */
+.home .narr{margin:24px 0 64px;text-align:center;
+  font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:16px;line-height:2.1;letter-spacing:.2px;color:var(--ink);word-break:keep-all}
+.home .narr p{margin:0;text-wrap:balance}
+.home .narr::before{content:"";display:block;width:18px;height:62px;margin:0 auto 36px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 34' fill='none' stroke='%23999' stroke-width='1.1' stroke-linejoin='round'%3E%3Cpath d='M12 33 L4 16 Q4 9 9 6 L9 1 L15 1 L15 6 Q20 9 20 16 Z'/%3E%3Cpath d='M12 33 L12 19'/%3E%3Ccircle cx='12' cy='16.5' r='2.2'/%3E%3C/svg%3E") center top/16px auto no-repeat,linear-gradient(var(--line),var(--line)) center bottom/1px 28px no-repeat}
+.home .narr::after{content:"";display:block;width:1px;height:28px;margin:40px auto 0;background:var(--line)}
 .home .narr p:first-child{margin:0 0 18px;font-size:14px;color:var(--cap)}
-.home .narr p:nth-child(6){margin-top:18px}
-.home .narr p:nth-child(8){margin-top:18px;font-weight:700}
-.home .narr p:last-child{margin-top:18px}
+.home .narr p:nth-child(6),.home .narr p:nth-child(8),.home .narr p:last-child{margin-top:18px}
+.home .narr p:nth-child(8){font-weight:700}
 .wrap .prologue{margin:8px auto 64px;max-width:440px;text-align:center;
   font-family:"Nanum Myeongjo","AppleMyungjo",serif;font-size:13.5px;line-height:2;color:var(--sub);letter-spacing:.2px;word-break:keep-all}
 .wrap .prologue::after{content:"· · ·";display:block;margin:28px 0 0;font-family:"Noto Sans KR",sans-serif;font-size:12px;letter-spacing:.3em;color:var(--cap)}
 .wrap .prologue + hr{display:none}
 /* 10-20 메인 띠 제목이 목록·내레이션보다 24px 왼쪽으로 나와 있던 것 — 같은 세로선에 맞춤 */
 .band .in{max-width:calc(var(--col) - 48px)}
+/* 10-20 폰 세로 화면에서 커버 주인공이 반쯤 잘리던 것 — 커버 그림은 주인공을 가로 60% 언저리에 둔다(커버.jpg 규칙) */
+@media (max-width:640px){.cover.full.coverb .bg{object-position:63% 40%}}
+@media (max-width:640px){.home .narr{font-size:14.5px}}
+/* 10-20 메인 띠 김자까: 조금 크게, 띠 아래선이 발목에 오도록 내리고 발은 띠 안에서 가린다(사장님 "조금만 더 키우고 좀더 내려줘. 발목정도까지") */
+.band{overflow:hidden}
+.band .fig{width:240px;height:240px;margin-bottom:-74px}
+@media (max-width:640px){.band .fig{width:150px;height:150px;margin-bottom:-56px}}
