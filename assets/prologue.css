@@ -28,3 +28,5 @@
 @media (max-width:640px){.cover.full.top{height:420px}.cover.full.coverb.top .bg{object-position:63% 40%}}
 /* 10-20 작가 상자: 전신을 원에 넣으니 몸통만 보였다 — 얼굴 컷(앱 아바타 얼굴)으로 */
 .author .av img{object-fit:cover;transform:none}
+/* 10-20 사장님 브런치 참고글(@winterlove/773): 짧은 문단 사이에 빈 줄 하나만큼 여백 — 24→30px */
+.wrap p{margin-bottom:30px}
