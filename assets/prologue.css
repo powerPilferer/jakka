@@ -19,9 +19,15 @@
 @media (max-width:640px){.home .narr{font-size:14.5px}}
 /* 10-20 메인 띠 김자까: 조금 크게, 띠 아래선이 발목에 오도록 내리고 발은 띠 안에서 가린다(사장님 "조금만 더 키우고 좀더 내려줘. 발목정도까지") */
 .band{overflow:hidden}
-.band .in{align-items:center}   /* 10-20 3차: 띠 세로 가운데 + 10px 아래로(사장님 "중앙정렬로하는데 그 기준에서 아래로 10픽셀만") */
-.band .fig{width:200px;height:200px;margin:0;align-self:center;transform:translateY(10px)}
-@media (max-width:640px){.band .fig{width:128px;height:128px;margin:0}}
+/* 10-20 4차: 김자까를 띠 높이와 떼어 냄(띠는 원래 두께 유지). 값은 사장님이 「띠위치편집기」로 정함(PC 크기300·오른쪽-26·아래-151, 제목 가로+6). 제목은 메뉴줄 아래 보이는 띠 안에서 위아래 가운데(사장님 "타이틀은 띠 위아래 가운데 정렬") — PC 50/49, 폰 42/42 실측 */
+:root{--fig-r:-26px;--fig-b:-151px;--fig-s:300px;--fig-r-m:4px;--fig-b-m:-38px;--fig-s-m:120px;
+  --band-pt:110px;--band-pb:49px;--title-x:6px;--title-y:0px;--band-pt-m:102px;--band-pb-m:42px;--title-x-m:0px;--title-y-m:0px}
+.band{padding-top:var(--band-pt);padding-bottom:var(--band-pb)}
+.band .in>div:first-child{transform:translate(var(--title-x),var(--title-y))}
+@media (max-width:640px){.band{padding-top:var(--band-pt-m);padding-bottom:var(--band-pb-m)}.band .in>div:first-child{transform:translate(var(--title-x-m),var(--title-y-m))}}
+.band .in{position:relative}
+.band .fig{position:absolute;right:var(--fig-r);bottom:var(--fig-b);width:var(--fig-s);height:var(--fig-s);margin:0}
+@media (max-width:640px){.band .fig{right:var(--fig-r-m);bottom:var(--fig-b-m);width:var(--fig-s-m);height:var(--fig-s-m);margin:0}}
 /* 10-20 커버 '상단' 형식 — 화면 가득 대신 위쪽 고정 높이(브런치식). 커버형식.txt 로 글마다 고른다 */
 .cover.full.top{height:520px;min-height:0}
 .cover.full.top .bgw{position:absolute;height:100%}
