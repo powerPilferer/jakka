@@ -78,7 +78,7 @@ section[id]{scroll-margin-top:92px}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .poster{margin:0;padding:0;border:0;background:none;cursor:zoom-in;display:block;width:100%;text-align:left;border-radius:6px}
 .pz{--ty0:21cqw;position:relative;aspect-ratio:4/5;container-type:inline-size;overflow:hidden;background:var(--fill);border-radius:6px;color:var(--ink)}
-.pz .ly{position:absolute;left:var(--x);width:var(--w);bottom:0;height:auto;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.pz .ly{position:absolute;left:var(--x);width:var(--w);max-width:none;bottom:0;height:auto;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .pz .bgi{-webkit-mask-image:var(--mask);mask-image:var(--mask);-webkit-mask-composite:source-in;mask-composite:intersect}
 .pz .cut{z-index:2}
 .pz .pt{position:absolute;z-index:1;left:0;right:0;top:var(--ty);margin:0;text-align:center;
@@ -208,9 +208,17 @@ a:focus-visible,.poster:focus-visible{outline:2px solid var(--ink);outline-offse
     <div class="head"><h2 id="h-posters">POSTERS</h2><span>셋씩 모인 단체 사진 · 누르면 크게</span></div>
     <div class="pgrid" data-motion="posters">
       <!-- 그룹1만 90%로 세워(좌우 페더 14%) 머리가 WORKS 아랫변에 걸치는 깊이를 다른 둘과 맞춘다(1019 그룹1 66% 과 같은 수법).
-           10/27 새 포스터 3장(통합앱/시안/캐릭터톤변경-1023/확정/확정-그룹포스터N-*.png). 앞으로 그룹4(치수정·요원 H·모선)·트리오(미지·자온·김자까)가 더 온다 —
+           10/27 포스터 5장(통합앱/시안/캐릭터톤변경-1023/확정/확정-그룹포스터N-*.png). 순서 = 트리오(g5, 이 페이지를 만든 셋) → 작업 장면 g1·g2·g3·g4. 트리오는 원본 4:3을 정사각으로 늘린 판이라 옆 배경을 잘라 116%로 키워 머리를 WORKS 에 걸친다 —
            버튼 하나를 같은 꼴로 추가하면 번호(.pn)·aria-label 번호·크게 보기 카운터는 JS 가 DOM 순서대로 매긴다.
            층: 원본(1:1, --fill 은 그림 윗줄 색 5점) → JAON WORKS 글자 → 같은 자리 누끼(BiRefNet). 재생성: 디자인개편/갱신-1027/도구/누끼.py -->
+      <button class="poster" type="button" aria-label="크게 보기 — 미지, 자온, 김자까">
+        <div class="pz" style="--fill:linear-gradient(90deg,rgb(218,209,204),rgb(218,210,205) 25%,rgb(218,211,205) 50%,rgb(218,209,204) 75%,rgb(216,207,202));--x:-8%;--w:116%;--ty:var(--ty0);--mask:linear-gradient(to bottom,transparent,#000 10%),linear-gradient(#000,#000)">
+          <img class="ly bgi" src="img/poster-g5.webp" alt="" width="1400" height="1400">
+          <p class="pt" aria-hidden="true">JAON<br>WORKS</p>
+          <img class="ly cut" src="img/poster-g5-cut.webp" alt="미지, 자온, 김자까가 나란히 선 단체 사진" width="1400" height="1400">
+          <span class="pm">반장과 그림과 글, 이 페이지를 만든 셋<small>미지 · 자온 · 김자까</small></span><span class="pn"></span>
+        </div>
+      </button>
       <button class="poster" type="button" aria-label="크게 보기 — 점빵이, 인태리, 춘봉">
         <div class="pz" style="--fill:linear-gradient(90deg,rgb(233,214,178),rgb(235,217,180) 25%,rgb(236,218,182) 50%,rgb(236,218,182) 75%,rgb(235,215,180));--x:5%;--w:90%;--ty:var(--ty0);--mask:linear-gradient(to right,transparent,#000 14%,#000 86%,transparent),linear-gradient(to bottom,transparent,#000 10%)">
           <img class="ly bgi" src="img/poster-g1.webp" alt="" width="1400" height="1400">
@@ -233,6 +241,14 @@ a:focus-visible,.poster:focus-visible{outline:2px solid var(--ink);outline-offse
           <p class="pt" aria-hidden="true">JAON<br>WORKS</p>
           <img class="ly cut" src="img/poster-g3-cut.webp" alt="모아가 사진을 건네고, 신화방이 스케치북에 그리고, 단비가 뒤에서 떠서 메모하는 단체 사진" width="1400" height="1400">
           <span class="pm">주워 온 장면이 그림이 되기까지<small>모아 · 신화방 · 단비</small></span><span class="pn"></span>
+        </div>
+      </button>
+      <button class="poster" type="button" aria-label="크게 보기 — 요원 H, 치수정, 모선">
+        <div class="pz" style="--fill:linear-gradient(90deg,rgb(245,208,189),rgb(245,208,189) 25%,rgb(245,208,189) 50%,rgb(245,208,189) 75%,rgb(245,208,189));--x:0%;--w:100%;--ty:var(--ty0);--mask:linear-gradient(to bottom,transparent,#000 10%),linear-gradient(#000,#000)">
+          <img class="ly bgi" src="img/poster-g4.webp" alt="" width="1400" height="1400">
+          <p class="pt" aria-hidden="true">JAON<br>WORKS</p>
+          <img class="ly cut" src="img/poster-g4-cut.webp" alt="치수정이 요원 H의 선글라스 알을 캘리퍼스로 재고, 요원 H는 이어피스를 잡은 채 경계하고, 모선이 코트 허리끈에 매달려 그네를 타는 단체 사진" width="1400" height="1400">
+          <span class="pm">해결사도 치수는 못 피한다<small>요원 H · 치수정 · 모선</small></span><span class="pn"></span>
         </div>
       </button>
     </div>
